@@ -21,6 +21,11 @@ int _printf(const char *format, ...)
 	va_start(list, format);
 	for (len = 0; len < strlen(format); len += 2)
 	{
+		if (format == NULL || format[len] != '%')
+		{
+			printf("Error");
+			return (-1);
+		}
 		if (format[len] == '%' && format[len + 1] == 'c')
 		{
 			ch = va_arg(list, int);
