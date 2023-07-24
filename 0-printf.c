@@ -5,7 +5,8 @@
 #include "main.h"
 
 /**
- * _printf - prints to the std output depending on the specifier fiven as argument
+ * _printf - prints to the std output depending
+ *on the specifier fiven as argument
  * @format : string containing the format specifiers
  * Return: strlen of whatever is printed
  */
