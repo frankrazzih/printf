@@ -14,28 +14,36 @@ int _printf(const char *format, ...)
 {
 	char ch;
 	char *str;
-	size_t len;
+	size_t len, len1;
 	int ret = 0;
 	va_list list;
+	char err[] = "Error";
+
 
 	va_start(list, format);
 	for (len = 0; len < strlen(format); len += 2)
 	{
 		if (format == NULL || format[len] != '%')
 		{
-			printf("Error");
+			for (len1 = 0; len1 < strlen(err); len1++)
+			{
+				putchar(err[ret]);
+			}
 			return (-1);
 		}
 		if (format[len] == '%' && format[len + 1] == 'c')
 		{
 			ch = va_arg(list, int);
-			printf("%c", ch);
+			putchar("%c", ch);
 			ret += 1;
 		}
 		else if (format[len] == '%' && format[len + 1] == 's')
 		{
 			str = va_arg(list, char*);
-			printf("%s", str);
+			for (len1 = 0; len1 < strlen(str); len1++)
+			{
+				putchar(str[len1]);
+			}
 			ret += strlen(str);
 		}
 	}
