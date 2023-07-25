@@ -1,55 +1,64 @@
 #include "main.h"
-#include <stddef.h>
-#include <stdio.h>
-#include <stdarg.h>
-#include <string.h>
-/**
-  * _printf-Prints anything to the console
-  * @format: Pointer to string
-  * ...: Variable number of arguments
-  * Return: Number of characters printed to the console
-  */
-int _printf(const char *format, ...)
-{
-	va_list args;
-	int i = 0;
-	char ch;
-	char *str;
-	size_t x, count = 0;
 
-	va_start(args, format);
-	count = i = 0;
-	if (format == NULL)
+void print_buffer(char buff[], int *buff_ind);
+
+/**
+ * _printf - Printf function
+ * @format: format.
+ * Return: Printed chars.
+ */
+int _printf(const char *fmt, ...)
+{
+	int i, printed = 0, printed_chars = 0;
+	int flags, width, precision, size, buff_ind = 0;
+	va_list list;
+	char buffer[BUFF_SIZE];
+
+	if (fmt == NULL)
 		return (-1);
-	while (format[i] != '\0')
+
+	va_start(list, fmt);
+
+	for (i = 0; fmt && fmt[i] != '\0'; i++)
 	{
-		if (format[i] != '%')
+		if (fmt[i] != '%')
 		{
-			continue;
+			buffer[buff_ind++] = fmt[i];
+			if (buff_ind == BUFF_SIZE)
+				print_buffer(buffer, &buff_ind);
+			printed_chars++;
 		}
 		else
 		{
-			switch (format[i + 1])
-			{
-				case 'c':
-					ch = (char) va_arg(args, int);
-					_putchar(ch);
-					count++;
-					break;
-				case 's':
-					str = va_arg(args, char *);
-					count += strlen(str);
-					for (x = 0; x < strlen(str); x++)
-					{
-						_putchar(str[x]);
-					}
-					break;
-				default:
-					continue;
-			}
+			print_buffer(buffer, &buff_ind);
+			flags = get_flags(fmt, &i);
+			width = get_width(fmt, &i, list);
+			precision = get_precision(fmt, &i, list);
+			size = get_size(fmt, &i);
+			++i;
+			printed = handle_print(fmt, &i, list, buffer,
+					flags, width, precision, size);
+			if (printed == -1)
+				return (-1);
+			printed_chars += printed;
 		}
-		i++;
 	}
-	va_end(args);
-	return (count);
+	print_buffer(buffer, &buff_ind);
+
+	va_end(list);
+
+	return (printed_chars);
 }
+
+/**
+ * print_buffer - Prints the contents of the buffer if it exists
+ * @buff: Array of chars
+ * @buff_ind: Index at which to add the next char, represents the length.
+ */
+void print_buffer(char buff[], int *buff_ind)
+{
+	if (*buff_ind > 0)
+		write(1, &buff[0], *buff_ind);
+	*buff_ind = 0;
+}
+
