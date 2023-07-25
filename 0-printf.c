@@ -34,7 +34,7 @@ int _printf(const char *format, ...)
 		if (format[len] == '%' && format[len + 1] == 'c')
 		{
 			ch = va_arg(list, int);
-			putchar("%c", ch);
+			putchar(ch);
 			ret += 1;
 		}
 		else if (format[len] == '%' && format[len + 1] == 's')
