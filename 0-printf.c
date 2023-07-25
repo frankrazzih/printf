@@ -1,37 +1,55 @@
 #include "main.h"
-#include <stdio.h>
-#include <string.h>
 #include <stddef.h>
+#include <stdio.h>
 #include <stdarg.h>
-
+#include <string.h>
 /**
- * _printf - prints strings and chars
- * @format - string containing the format specifiers
- * Return: the number of chars printed
- */
+  * _printf-Prints anything to the console
+  * @format: Pointer to string
+  * ...: Variable number of arguments
+  * Return: Number of characters printed to the console
+  */
 int _printf(const char *format, ...)
 {
-        char *ch;
-        char *str;
-        size_t len;
-        int ret = 0;
-        va_list list;
+	va_list args;
+	int i = 0;
+	char ch;
+	char *str;
+	size_t x, count = 0;
 
-        va_start(list, format);
-        for (len = 0; len < strlen(format); len ++)
-        {
-                if (format[len] == '%' && format[len + 1] == 'c')
-                {
-                        ch = va_arg(list, char*);
-                        printf("%c", ch);
-                        ret += strlen(ch);
-                }
-                else if (format[len] == '%' && format[len + 1] == 's')
-                {
-                        str = va_arg(list, char*);
-                        printf("%s", str);
-                        ret += strlen(str);
-                }
-        }
-        return (ret);
+	va_start(args, format);
+	count = i = 0;
+	if (format == NULL)
+		return (-1);
+	while (format[i] != '\0')
+	{
+		if (format[i] != '%')
+		{
+			continue;
+		}
+		else
+		{
+			switch (format[i + 1])
+			{
+				case 'c':
+					ch = (char) va_arg(args, int);
+					putchar(ch);
+					count++;
+					break;
+				case 's':
+					str = va_arg(args, char *);
+					count += strlen(str);
+					for (x = 0; x < strlen(str); x++)
+					{
+						putchar(str[x]);
+					}
+					break;
+				default:
+					continue;
+			}
+		}
+		i++;
+	}
+	va_end(args);
+	return (count);
 }
