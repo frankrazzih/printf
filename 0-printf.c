@@ -1,48 +1,37 @@
 #include "main.h"
+#include <stdio.h>
+#include <string.h>
+#include <stddef.h>
+#include <stdarg.h>
+
 /**
-  * _printf-Prints anything to the console
-  * @format: Pointer to string
-  * ...: Variable number of arguments
-  * Return: Number of characters printed to the console
-  */
+ * _printf - prints strings and chars
+ * @format - string containing the format specifiers
+ * Return: the number of chars printed
+ */
 int _printf(const char *format, ...)
 {
-        va_list arguments;
-        int cnt, i;
-        char d;
-        char *ptr;
+        char *ch;
+        char *str;
+        size_t len;
+        int ret = 0;
+        va_list list;
 
-        cnt = i = 0;
-        va_start(arguments, format);
-
-        while (format[i] != '\0')
+        va_start(list, format);
+        for (len = 0; len < strlen(format); len += 2)
         {
-                if (format[i] == '%')
+                if (format[len] == '%' && format[len + 1] == 'c')
                 {
-                        switch (format[i + 1])
-                        {
-                                case 'c':
-                                        d = va_arg(arguments, int);
-                                        _putchar(d);
-                                        cnt++;
-                                        break;
-                                case '%':
-                                        _putchar('%');
-                                        cnt++;
-                                        break;
-                                case 's':
-                                        ptr = va_arg(arguments, char *);
-                                        cnt += print_str(ptr);
-                                        break;
-                        }
-                        i += 2;
+                        ch = va_arg(list, char*);
+                        printf("%c", ch);
+                        ret += strlen(ch);
                 }
-                else
+                else if (format[len] == '%' && format[len + 1] == 's')
                 {
-                        _putchar(format[i]);
-                        i++;
-                        cnt++;
+                        str = va_arg(list, char*);
+                        printf("%s", str);
+                        ret += strlen(str);
                 }
         }
-        return (cnt);
+        return (ret);
 }
