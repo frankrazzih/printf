@@ -33,7 +33,7 @@ int _printf(const char *format, ...)
 			{
 				case 'c':
 					ch = (char) va_arg(args, int);
-					putchar(ch);
+					_putchar(ch);
 					count++;
 					break;
 				case 's':
@@ -41,7 +41,7 @@ int _printf(const char *format, ...)
 					count += strlen(str);
 					for (x = 0; x < strlen(str); x++)
 					{
-						putchar(str[x]);
+						_putchar(str[x]);
 					}
 					break;
 				default:
