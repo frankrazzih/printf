@@ -18,7 +18,7 @@ int _printf(const char *format, ...)
         va_list list;
 
         va_start(list, format);
-        for (len = 0; len < strlen(format); len += 2)
+        for (len = 0; len < strlen(format); len ++)
         {
                 if (format[len] == '%' && format[len + 1] == 'c')
                 {
